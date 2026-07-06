@@ -117,15 +117,57 @@
                             icon.classList.replace('bi-eye-slash', 'bi-eye');
                         }
                     }
+
+                    // Real-time password length check
+                    document.getElementById('password').addEventListener('input', function() {
+                        if (this.value.length > 0 && this.value.length < 6) {
+                            this.classList.add('is-invalid');
+                            this.classList.remove('is-valid');
+                            let fb = this.parentElement.querySelector('.invalid-feedback');
+                            if (!fb) { fb = document.createElement('div'); fb.className = 'invalid-feedback'; this.parentElement.appendChild(fb); }
+                            fb.textContent = 'Password must be at least 6 characters.';
+                        } else if (this.value.length >= 6) {
+                            this.classList.remove('is-invalid');
+                            this.classList.add('is-valid');
+                        }
+                        // Also recheck confirm field
+                        const conf = document.getElementById('confirmPassword');
+                        if (conf.value.length > 0) conf.dispatchEvent(new Event('input'));
+                    });
+
+                    // Real-time confirm password match
+                    document.getElementById('confirmPassword').addEventListener('input', function() {
+                        const pass = document.getElementById('password').value;
+                        let fb = this.parentElement.querySelector('.invalid-feedback');
+                        if (!fb) { fb = document.createElement('div'); fb.className = 'invalid-feedback'; this.parentElement.appendChild(fb); }
+                        if (this.value !== pass) {
+                            this.classList.add('is-invalid');
+                            this.classList.remove('is-valid');
+                            fb.textContent = 'Passwords do not match.';
+                        } else {
+                            this.classList.remove('is-invalid');
+                            this.classList.add('is-valid');
+                        }
+                    });
+
+                    // Final submit guard
                     document.getElementById('registerForm').addEventListener('submit', function(e) {
                         var pass = document.getElementById('password').value;
                         var conf = document.getElementById('confirmPassword').value;
+                        if (pass.length < 6) {
+                            e.preventDefault();
+                            document.getElementById('password').dispatchEvent(new Event('input'));
+                            document.getElementById('password').focus();
+                            return;
+                        }
                         if (pass !== conf) {
                             e.preventDefault();
-                            alert("Passwords do not match!");
+                            document.getElementById('confirmPassword').dispatchEvent(new Event('input'));
+                            document.getElementById('confirmPassword').focus();
                         }
                     });
                 </script>
+
 
                 <div class="text-center mt-2">
                     <p class="small text-muted mb-0">Already have an account? <a href="login.jsp" class="text-success fw-bold text-decoration-none">Log In Here</a></p>

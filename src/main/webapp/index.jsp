@@ -1,5 +1,7 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <%@ page import="com.wastelink.model.User" %>
+<%@ page import="com.wastelink.db.DBConnection" %>
+<%@ page import="java.sql.*" %>
 <%
     User indexUser = (User) session.getAttribute("user");
     String primaryLink = "login.jsp";
@@ -25,6 +27,20 @@
             secondaryText = "Go to Dashboard";
         }
     }
+
+    // Live stats from DB
+    int statIndustries = 0, statRecyclers = 0, statMatches = 0;
+    double statCo2 = 0.0;
+    try (Connection _c = DBConnection.getConnection()) {
+        try (PreparedStatement ps = _c.prepareStatement("SELECT COUNT(*) FROM USERS WHERE role='INDUSTRY' AND status='ACTIVE'");
+             ResultSet rs = ps.executeQuery()) { if (rs.next()) statIndustries = rs.getInt(1); }
+        try (PreparedStatement ps = _c.prepareStatement("SELECT COUNT(*) FROM USERS WHERE role='RECYCLER' AND status='ACTIVE'");
+             ResultSet rs = ps.executeQuery()) { if (rs.next()) statRecyclers = rs.getInt(1); }
+        try (PreparedStatement ps = _c.prepareStatement("SELECT COUNT(*) FROM MATCHES WHERE status IN ('ACCEPTED','COMPLETED')");
+             ResultSet rs = ps.executeQuery()) { if (rs.next()) statMatches = rs.getInt(1); }
+        try (PreparedStatement ps = _c.prepareStatement("SELECT COALESCE(SUM(co2_saved_kg),0) FROM MATCHES WHERE status IN ('ACCEPTED','COMPLETED')");
+             ResultSet rs = ps.executeQuery()) { if (rs.next()) statCo2 = rs.getDouble(1); }
+    } catch (Exception _e) { _e.printStackTrace(); }
 %>
 <jsp:include page="includes/navbar.jsp" />
 
@@ -42,25 +58,25 @@
     </div>
 </div>
 
-<!-- Stats Bar -->
+<!-- Live Stats Bar — pulled from DB -->
 <div class="bg-white py-4 border-bottom border-top border-light shadow-sm">
     <div class="container">
         <div class="row text-center text-dark">
             <div class="col-md-3 border-end">
-                <h3 class="fw-bold text-success mb-1">500+</h3>
+                <h3 class="fw-bold text-success mb-1"><%= statIndustries > 0 ? statIndustries + "+" : "—" %></h3>
                 <span class="text-muted small uppercase fw-semibold">Active Industries</span>
             </div>
             <div class="col-md-3 border-end">
-                <h3 class="fw-bold text-success mb-1">200+</h3>
+                <h3 class="fw-bold text-success mb-1"><%= statRecyclers > 0 ? statRecyclers + "+" : "—" %></h3>
                 <span class="text-muted small uppercase fw-semibold">Certified Recyclers</span>
             </div>
             <div class="col-md-3 border-end">
-                <h3 class="fw-bold text-success mb-1">10,000 Tons</h3>
-                <span class="text-muted small uppercase fw-semibold">Waste Diverted</span>
+                <h3 class="fw-bold text-success mb-1"><%= statMatches %></h3>
+                <span class="text-muted small uppercase fw-semibold">Successful Trades</span>
             </div>
             <div class="col-md-3">
-                <h3 class="fw-bold text-success mb-1">₹2Cr+</h3>
-                <span class="text-muted small uppercase fw-semibold">Value Exchanged</span>
+                <h3 class="fw-bold text-success mb-1"><%= String.format("%.0f", statCo2) %> kg</h3>
+                <span class="text-muted small uppercase fw-semibold">CO₂ Saved</span>
             </div>
         </div>
     </div>

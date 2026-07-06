@@ -239,7 +239,10 @@
 
                             <!-- Operations -->
                             <div class="d-flex justify-content-end gap-2 mt-3 pt-2 border-top">
-                                <a href="manage-waste?action=delete&wasteId=<%= w.getWasteId() %>" class="btn btn-sm btn-outline-danger py-1" onclick="return confirm('Are you sure you want to delete this listing?');">Delete Listing</a>
+                                <button type="button" class="btn btn-sm btn-outline-danger py-1"
+                                    onclick="confirmDelete('<%= w.getWasteId() %>', '<%= w.getWasteType().replace("'", "\\'" ) %>')">
+                                    <i class="bi bi-trash"></i> Delete Listing
+                                </button>
                             </div>
                         </div>
                     </div>
@@ -248,5 +251,34 @@
         </div>
     </div>
 </div>
+
+<!-- Delete Confirmation Modal -->
+<div class="modal fade" id="deleteModal" tabindex="-1" aria-labelledby="deleteModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content rounded-4 shadow">
+            <div class="modal-header border-0 pb-0">
+                <h5 class="modal-title fw-bold" id="deleteModalLabel"><i class="bi bi-exclamation-triangle-fill text-danger me-2"></i>Delete Listing</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body pt-2">
+                <p class="text-muted mb-1">You are about to permanently delete:</p>
+                <p class="fw-bold text-dark" id="deleteListingName"></p>
+                <p class="small text-danger mb-0">This action cannot be undone.</p>
+            </div>
+            <div class="modal-footer border-0">
+                <button type="button" class="btn btn-outline-secondary rounded-3" data-bs-dismiss="modal">Cancel</button>
+                <a href="#" id="deleteConfirmBtn" class="btn btn-danger rounded-3"><i class="bi bi-trash-fill me-1"></i>Yes, Delete</a>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+function confirmDelete(wasteId, wasteName) {
+    document.getElementById('deleteListingName').textContent = wasteName;
+    document.getElementById('deleteConfirmBtn').href = 'manage-waste?action=delete&wasteId=' + wasteId;
+    new bootstrap.Modal(document.getElementById('deleteModal')).show();
+}
+</script>
 
 <jsp:include page="includes/footer.jsp" />

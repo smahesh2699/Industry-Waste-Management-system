@@ -143,9 +143,56 @@
 </div>
 
 <script>
+    // ── Real-time field validation ──────────────────────────────────────
+    function showError(fieldId, msg) {
+        const field = document.getElementById(fieldId);
+        field.classList.add('is-invalid');
+        let fb = field.parentElement.querySelector('.invalid-feedback');
+        if (!fb) { fb = document.createElement('div'); fb.className = 'invalid-feedback'; field.parentElement.appendChild(fb); }
+        fb.textContent = msg;
+    }
+    function clearError(fieldId) {
+        const field = document.getElementById(fieldId);
+        field.classList.remove('is-invalid');
+        field.classList.add('is-valid');
+    }
+
+    document.getElementById('wasteType').addEventListener('blur', function() {
+        if (this.value.trim().length < 3) showError('wasteType', 'Please enter at least 3 characters for the material name.');
+        else clearError('wasteType');
+    });
+
+    document.getElementById('quantity').addEventListener('blur', function() {
+        if (!this.value || parseFloat(this.value) <= 0) showError('quantity', 'Quantity must be greater than 0 kg.');
+        else clearError('quantity');
+    });
+
+    document.getElementById('price').addEventListener('blur', function() {
+        if (this.value === '' || parseFloat(this.value) < 0) showError('price', 'Price cannot be negative.');
+        else clearError('price');
+    });
+
+    // Prevent submit if any errors remain
+    document.querySelector('form').addEventListener('submit', function(e) {
+        let valid = true;
+        const wasteType = document.getElementById('wasteType');
+        const qty = document.getElementById('quantity');
+        const price = document.getElementById('price');
+        const cat = document.getElementById('category');
+
+        if (wasteType.value.trim().length < 3) { showError('wasteType', 'Please enter at least 3 characters.'); valid = false; }
+        if (!qty.value || parseFloat(qty.value) <= 0) { showError('quantity', 'Quantity must be greater than 0 kg.'); valid = false; }
+        if (price.value === '' || parseFloat(price.value) < 0) { showError('price', 'Price cannot be negative.'); valid = false; }
+        if (!cat.value) { cat.classList.add('is-invalid'); valid = false; }
+
+        if (!valid) e.preventDefault();
+    });
+
+    // ── Smart Price Suggestion ──────────────────────────────────────────
     document.getElementById('category').addEventListener('change', function() {
         var category = this.value;
         if (!category) return;
+        this.classList.remove('is-invalid');
 
         var suggestionBox = document.getElementById('price-suggestion-box');
         
@@ -162,5 +209,6 @@
             });
     });
 </script>
+
 
 <jsp:include page="includes/footer.jsp" />
