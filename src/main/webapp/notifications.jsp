@@ -35,12 +35,18 @@
                         <a class="nav-link" href="my-listings.jsp">
                             <i class="bi bi-list-task"></i> My Listings
                         </a>
+                        <a class="nav-link" href="match-requests.jsp">
+                            <i class="bi bi-arrow-left-right"></i> Match Requests
+                        </a>
                     <% } else { %>
                         <a class="nav-link" href="recycler-dashboard.jsp">
                             <i class="bi bi-speedometer2"></i> Dashboard
                         </a>
                         <a class="nav-link" href="marketplace">
                             <i class="bi bi-shop"></i> Marketplace
+                        </a>
+                        <a class="nav-link" href="match-requests.jsp">
+                            <i class="bi bi-arrow-left-right"></i> Match Requests
                         </a>
                     <% } %>
                     <a class="nav-link" href="analytics">

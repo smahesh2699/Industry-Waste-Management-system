@@ -33,6 +33,9 @@
                 <a class="nav-link active" href="my-listings.jsp">
                     <i class="bi bi-list-task"></i> My Listings
                 </a>
+                <a class="nav-link" href="match-requests.jsp">
+                    <i class="bi bi-arrow-left-right"></i> Match Requests
+                </a>
                 <a class="nav-link" href="analytics">
                     <i class="bi bi-bar-chart"></i> Analytics
                 </a>

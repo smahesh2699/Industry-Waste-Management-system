@@ -64,6 +64,9 @@
                             <a class="nav-link" href="<%= request.getContextPath() %>/my-listings.jsp"><i class="bi bi-list-task"></i> My Listings</a>
                         </li>
                         <li class="nav-item">
+                            <a class="nav-link" href="<%= request.getContextPath() %>/match-requests.jsp"><i class="bi bi-arrow-left-right"></i> Matches</a>
+                        </li>
+                        <li class="nav-item">
                             <a class="nav-link" href="<%= request.getContextPath() %>/analytics"><i class="bi bi-bar-chart"></i> Analytics</a>
                         </li>
                     <% } else { %>
