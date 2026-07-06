@@ -113,6 +113,9 @@
                 <a class="nav-link" href="marketplace">
                     <i class="bi bi-shop"></i> Marketplace
                 </a>
+                <a class="nav-link" href="match-requests.jsp">
+                    <i class="bi bi-arrow-left-right"></i> Match Requests
+                </a>
                 <a class="nav-link" href="analytics">
                     <i class="bi bi-bar-chart"></i> Analytics
                 </a>

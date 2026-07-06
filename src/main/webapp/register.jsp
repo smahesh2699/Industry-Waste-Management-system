@@ -39,11 +39,21 @@
                     <div class="row g-3 mb-3">
                         <div class="col-md-6">
                             <label for="password" class="form-label small fw-semibold text-muted">Password</label>
-                            <input type="password" class="form-control rounded-3" id="password" name="password" required placeholder="Minimum 6 characters">
+                            <div class="input-group">
+                                <input type="password" class="form-control rounded-start-3" id="password" name="password" required placeholder="Minimum 6 characters">
+                                <button class="btn btn-outline-secondary rounded-end-3" type="button" id="toggleRegPass" onclick="togglePass('password','toggleRegPass')">
+                                    <i class="bi bi-eye" id="toggleRegPassIcon"></i>
+                                </button>
+                            </div>
                         </div>
                         <div class="col-md-6">
                             <label for="confirmPassword" class="form-label small fw-semibold text-muted">Confirm Password</label>
-                            <input type="password" class="form-control rounded-3" id="confirmPassword" required placeholder="Repeat password">
+                            <div class="input-group">
+                                <input type="password" class="form-control rounded-start-3" id="confirmPassword" required placeholder="Repeat password">
+                                <button class="btn btn-outline-secondary rounded-end-3" type="button" id="toggleConfPass" onclick="togglePass('confirmPassword','toggleConfPass')">
+                                    <i class="bi bi-eye" id="toggleConfPassIcon"></i>
+                                </button>
+                            </div>
                         </div>
                     </div>
 
@@ -96,6 +106,17 @@
                 </form>
 
                 <script>
+                    function togglePass(fieldId, btnId) {
+                        var field = document.getElementById(fieldId);
+                        var icon = document.getElementById(btnId + 'Icon');
+                        if (field.type === 'password') {
+                            field.type = 'text';
+                            icon.classList.replace('bi-eye', 'bi-eye-slash');
+                        } else {
+                            field.type = 'password';
+                            icon.classList.replace('bi-eye-slash', 'bi-eye');
+                        }
+                    }
                     document.getElementById('registerForm').addEventListener('submit', function(e) {
                         var pass = document.getElementById('password').value;
                         var conf = document.getElementById('confirmPassword').value;

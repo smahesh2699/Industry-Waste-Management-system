@@ -38,12 +38,18 @@
                         <a class="nav-link" href="my-listings.jsp">
                             <i class="bi bi-list-task"></i> My Listings
                         </a>
+                        <a class="nav-link" href="match-requests.jsp">
+                            <i class="bi bi-arrow-left-right"></i> Match Requests
+                        </a>
                     <% } else { %>
                         <a class="nav-link" href="recycler-dashboard.jsp">
                             <i class="bi bi-speedometer2"></i> Dashboard
                         </a>
                         <a class="nav-link" href="marketplace">
                             <i class="bi bi-shop"></i> Marketplace
+                        </a>
+                        <a class="nav-link" href="match-requests.jsp">
+                            <i class="bi bi-arrow-left-right"></i> Match Requests
                         </a>
                     <% } %>
                     <a class="nav-link" href="analytics">
@@ -196,6 +202,44 @@
                     </div>
                 </div>
 
+                <!-- Change Password Card -->
+                <div class="card card-wl p-4 border border-light shadow-sm mt-4">
+                    <h5 class="fw-bold text-success mb-3 border-bottom pb-2"><i class="bi bi-lock-fill me-2"></i>Change Password</h5>
+                    <% String pwMsg = request.getParameter("pwmsg"); %>
+                    <% if ("success".equals(pwMsg)) { %>
+                        <div class="alert alert-success py-2 small"><i class="bi bi-check-circle-fill"></i> Password changed successfully.</div>
+                    <% } else if ("error".equals(pwMsg)) { %>
+                        <div class="alert alert-danger py-2 small"><i class="bi bi-exclamation-triangle-fill"></i> Current password is incorrect. Please try again.</div>
+                    <% } else if ("mismatch".equals(pwMsg)) { %>
+                        <div class="alert alert-warning py-2 small"><i class="bi bi-exclamation-triangle-fill"></i> New passwords do not match.</div>
+                    <% } %>
+                    <form action="change-password" method="POST">
+                        <div class="mb-3">
+                            <label for="currentPassword" class="form-label small text-muted fw-semibold">Current Password</label>
+                            <div class="input-group">
+                                <input type="password" class="form-control rounded-start-3" id="currentPassword" name="currentPassword" required placeholder="Enter current password">
+                                <button class="btn btn-outline-secondary rounded-end-3" type="button" id="toggleCurr" onclick="togglePass('currentPassword','toggleCurr')"><i class="bi bi-eye" id="toggleCurrIcon"></i></button>
+                            </div>
+                        </div>
+                        <div class="mb-3">
+                            <label for="newPassword" class="form-label small text-muted fw-semibold">New Password</label>
+                            <div class="input-group">
+                                <input type="password" class="form-control rounded-start-3" id="newPassword" name="newPassword" required placeholder="Minimum 6 characters">
+                                <button class="btn btn-outline-secondary rounded-end-3" type="button" id="toggleNew" onclick="togglePass('newPassword','toggleNew')"><i class="bi bi-eye" id="toggleNewIcon"></i></button>
+                            </div>
+                        </div>
+                        <div class="mb-4">
+                            <label for="confirmNewPassword" class="form-label small text-muted fw-semibold">Confirm New Password</label>
+                            <div class="input-group">
+                                <input type="password" class="form-control rounded-start-3" id="confirmNewPassword" name="confirmNewPassword" required placeholder="Repeat new password">
+                                <button class="btn btn-outline-secondary rounded-end-3" type="button" id="toggleConf" onclick="togglePass('confirmNewPassword','toggleConf')"><i class="bi bi-eye" id="toggleConfIcon"></i></button>
+                            </div>
+                        </div>
+                        <button type="submit" class="btn btn-wl-primary text-white px-4">Update Password</button>
+                    </form>
+                </div>
+            </div>
+
                 <div class="col-lg-4">
                     <!-- Geolocation coordinates summary card -->
                     <div class="card border border-light p-4 bg-light rounded-3 mb-4 text-center">
@@ -221,4 +265,19 @@
     </div>
 </div>
 
+<script>
+function togglePass(fieldId, btnId) {
+    var field = document.getElementById(fieldId);
+    var icon = document.getElementById(btnId + 'Icon');
+    if (field.type === 'password') {
+        field.type = 'text';
+        icon.classList.replace('bi-eye', 'bi-eye-slash');
+    } else {
+        field.type = 'password';
+        icon.classList.replace('bi-eye-slash', 'bi-eye');
+    }
+}
+</script>
+
 <jsp:include page="includes/footer.jsp" />
+
