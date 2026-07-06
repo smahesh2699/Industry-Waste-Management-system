@@ -1,0 +1,23 @@
+# Maven build files
+target/
+*.war
+*.ear
+*.jar
+
+# IDE specific files
+.idea/
+*.iml
+*.iws
+.settings/
+.project
+.classpath
+.factorypath
+.recommenders/
+
+# Log files and database local configuration
+*.log
+scratch/
+
+# OS files
+.DS_Store
+Thumbs.db
